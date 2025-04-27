@@ -18,7 +18,7 @@
     </div>
 
     <div id="countdownSection">
-        <h1>Countdown: <span id="timer">60:00</span></h1>
+        <h1>Timer: <span id="timer">60:00</span></h1>
     </div>
 
     <div id="inputSection">
@@ -27,19 +27,19 @@
     </div>
 
     <div id="downloadLink">
-        <a href="yourfile.zip" download>Download your reward!</a>
+        <a href="yourfile.zip" download>Congratulations</a>
     </div>
 
     <script>
-        let correctCode = "SECRET123"; //
+        let correctCode = "39750"; //
         let countdown;
         let endTime;
 
         document.getElementById("startButton").addEventListener("click", function() {
             // Download file immediately
             let link = document.createElement('a');
-            link.href = 'startfile.zip'; //
-            link.download = 'startfile.zip';
+            link.href = '10-25-82.pdf'; //
+            link.download = '10-25-82.pdf';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
