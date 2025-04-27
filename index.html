@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ARG Puzzle</title>
+    <title>the game</title>
     <style>
         body { font-family: sans-serif; text-align: center; margin-top: 50px; }
         #startButton, #submitButton { padding: 10px 20px; font-size: 16px; margin: 10px; }
@@ -27,16 +27,17 @@
     </div>
 
     <div id="downloadLink">
-        <a href="yourfile.zip" download>Congratulations</a>
+        <a href="yourfile.zip" download>congratulations</a>
     </div>
 
     <script>
         let correctCode = "39750"; //
         let countdown;
         let endTime;
+        const penaltyTime = 2 * 60 * 1000; //
 
         document.getElementById("startButton").addEventListener("click", function() {
-            // Download file immediately
+            //
             let link = document.createElement('a');
             link.href = '10-25-82.pdf'; //
             link.download = '10-25-82.pdf';
@@ -44,14 +45,14 @@
             link.click();
             document.body.removeChild(link);
 
-            // Hide Start button
+            //
             document.getElementById("startSection").style.display = "none";
 
-            // Show countdown and input
+            //
             document.getElementById("countdownSection").style.display = "block";
             document.getElementById("inputSection").style.display = "block";
 
-            // Set end time
+            //
             endTime = new Date().getTime() + (60 * 60 * 1000); //
             localStorage.setItem("arg_endTime", endTime);
 
@@ -91,10 +92,13 @@
                 localStorage.removeItem("arg_endTime");
             } else {
                 alert("wrong");
+                //
+                endTime -= penaltyTime;
+                localStorage.setItem("arg_endTime", endTime);
             }
         });
 
-        // Optional: Handle page refresh
+        //
         window.onload = function() {
             if (localStorage.getItem("arg_endTime")) {
                 document.getElementById("startSection").style.display = "none";
