@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ARG Puzzle</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+        #startButton, #submitButton { padding: 10px 20px; font-size: 16px; margin: 10px; }
+        #codeInput { padding: 10px; font-size: 16px; }
+        #downloadLink { display: none; margin-top: 20px; font-size: 18px; }
+        #inputSection, #countdownSection { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="startSection">
+        <button id="startButton">Start</button>
+    </div>
+
+    <div id="countdownSection">
+        <h1>Countdown: <span id="timer">60:00</span></h1>
+    </div>
+
+    <div id="inputSection">
+        <input type="text" id="codeInput" placeholder="Enter code">
+        <button id="submitButton">Submit</button>
+    </div>
+
+    <div id="downloadLink">
+        <a href="yourfile.zip" download>Download your reward!</a>
+    </div>
+
+    <script>
+        let correctCode = "SECRET123"; //
+        let countdown;
+        let endTime;
+
+        document.getElementById("startButton").addEventListener("click", function() {
+            // Download file immediately
+            let link = document.createElement('a');
+            link.href = 'startfile.zip'; //
+            link.download = 'startfile.zip';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // Hide Start button
+            document.getElementById("startSection").style.display = "none";
+
+            // Show countdown and input
+            document.getElementById("countdownSection").style.display = "block";
+            document.getElementById("inputSection").style.display = "block";
+
+            // Set end time
+            endTime = new Date().getTime() + (60 * 60 * 1000); //
+            localStorage.setItem("arg_endTime", endTime);
+
+            startCountdown();
+        });
+
+        function startCountdown() {
+            countdown = setInterval(function() {
+                let now = new Date().getTime();
+                let storedEndTime = localStorage.getItem("arg_endTime");
+                if (storedEndTime) {
+                    endTime = parseInt(storedEndTime);
+                }
+                let distance = endTime - now;
+
+                if (distance <= 0) {
+                    clearInterval(countdown);
+                    document.getElementById("timer").textContent = "00:00";
+                    document.getElementById("inputSection").style.display = "none";
+                    localStorage.removeItem("arg_endTime");
+                } else {
+                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+                    document.getElementById("timer").textContent = minutes + ":" + seconds;
+                }
+            }, 1000);
+        }
+
+        document.getElementById("submitButton").addEventListener("click", function() {
+            let enteredCode = document.getElementById("codeInput").value.trim();
+            if (enteredCode === correctCode) {
+                clearInterval(countdown);
+                document.getElementById("downloadLink").style.display = "block";
+                document.getElementById("inputSection").style.display = "none";
+                localStorage.removeItem("arg_endTime");
+            } else {
+                alert("wrong");
+            }
+        });
+
+        // Optional: Handle page refresh
+        window.onload = function() {
+            if (localStorage.getItem("arg_endTime")) {
+                document.getElementById("startSection").style.display = "none";
+                document.getElementById("countdownSection").style.display = "block";
+                document.getElementById("inputSection").style.display = "block";
+                startCountdown();
+            }
+        };
+    </script>
+
+</body>
+</html>
