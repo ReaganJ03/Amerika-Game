@@ -60,28 +60,25 @@
         });
 
         function startCountdown() {
-            countdown = setInterval(function() {
-                let now = new Date().getTime();
-                let storedEndTime = localStorage.getItem("arg_endTime");
-                if (storedEndTime) {
-                    endTime = parseInt(storedEndTime);
-                }
-                let distance = endTime - now;
+        countdown = setInterval(function() {
+        let now = new Date().getTime();
+        let distance = endTime - now; // <-- use live endTime
 
-                if (distance <= 0) {
-                    clearInterval(countdown);
-                    document.getElementById("timer").textContent = "00:00";
-                    document.getElementById("inputSection").style.display = "none";
-                    localStorage.removeItem("arg_endTime");
-                } else {
-                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                    minutes = minutes < 10 ? "0" + minutes : minutes;
-                    seconds = seconds < 10 ? "0" + seconds : seconds;
-                    document.getElementById("timer").textContent = minutes + ":" + seconds;
-                }
-            }, 1000);
+        if (distance <= 0) {
+            clearInterval(countdown);
+            document.getElementById("timer").textContent = "00:00";
+            document.getElementById("inputSection").style.display = "none";
+            localStorage.removeItem("arg_endTime");
+        } else {
+            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            document.getElementById("timer").textContent = minutes + ":" + seconds;
         }
+    }, 1000);
+}
+
 
         document.getElementById("submitButton").addEventListener("click", function() {
             let enteredCode = document.getElementById("codeInput").value.trim();
@@ -93,8 +90,9 @@
             } else {
                 alert("wrong");
                 //
-                endTime -= penaltyTime;
+                endTime = endTime - penaltyTime;
                 localStorage.setItem("arg_endTime", endTime);
+
             }
         });
 
