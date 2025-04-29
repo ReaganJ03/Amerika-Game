@@ -30,8 +30,8 @@
         <a href="CM.pdf" download>congratulations</a>
     </div>
 
-    <script>
-        let correctCode = "39750";
+   <script>
+let correctCode = "39750";
 let countdown;
 let endTime;
 const penaltyTime = 2 * 60 * 1000;
@@ -55,7 +55,7 @@ document.getElementById("startButton").addEventListener("click", function() {
 });
 
 function startCountdown() {
-    clearInterval(countdown); //
+    clearInterval(countdown); 
     countdown = setInterval(function() {
         let now = new Date().getTime();
         let distance = endTime - now;
@@ -89,7 +89,7 @@ document.getElementById("submitButton").addEventListener("click", function() {
     }
 });
 
-window.onload = function () {
+window.onload = function() {
     let savedEndTime = localStorage.getItem("arg_endTime");
     if (savedEndTime) {
         let now = new Date().getTime();
@@ -102,9 +102,9 @@ window.onload = function () {
             document.getElementById("inputSection").style.display = "block";
             startCountdown();
         } else {
-            // Timer already expired, clean up
-            localStorage.removeItem("arg_endTime");
+            //
+            localStorage.removeItem("arg_endTime"); 
         }
     }
 };
-
+</script>
