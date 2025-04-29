@@ -14,7 +14,7 @@
 <body>
 
     <div id="startSection">
-        <button id="startButton">Start</button>
+        <button id="startButton">start</button>
     </div>
 
     <div id="countdownSection">
@@ -22,7 +22,7 @@
     </div>
 
     <div id="inputSection">
-        <input type="text" id="codeInput" placeholder="Enter code">
+        <input type="text" id="codeInput" placeholder="enter password">
         <button id="submitButton">Submit</button>
     </div>
 
@@ -31,38 +31,34 @@
     </div>
 
     <script>
-        let correctCode = "39750"; //
-        let countdown;
-        let endTime;
-        const penaltyTime = 2 * 60 * 1000; //
+        let correctCode = "39750";
+let countdown;
+let endTime;
+const penaltyTime = 2 * 60 * 1000;
 
-        document.getElementById("startButton").addEventListener("click", function() {
-            //
-            let link = document.createElement('a');
-            link.href = '10-25-82.pdf'; //
-            link.download = '10-25-82.pdf';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+document.getElementById("startButton").addEventListener("click", function() {
+    let link = document.createElement('a');
+    link.href = '10-25-82.pdf';
+    link.download = '10-25-82.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
-            //
-            document.getElementById("startSection").style.display = "none";
+    document.getElementById("startSection").style.display = "none";
+    document.getElementById("countdownSection").style.display = "block";
+    document.getElementById("inputSection").style.display = "block";
 
-            //
-            document.getElementById("countdownSection").style.display = "block";
-            document.getElementById("inputSection").style.display = "block";
+    endTime = new Date().getTime() + (60 * 60 * 1000);
+    localStorage.setItem("arg_endTime", endTime);
 
-            //
-            endTime = new Date().getTime() + (60 * 60 * 1000); //
-            localStorage.setItem("arg_endTime", endTime);
+    startCountdown();
+});
 
-            startCountdown();
-        });
-
-        function startCountdown() {
-        countdown = setInterval(function() {
+function startCountdown() {
+    clearInterval(countdown); //
+    countdown = setInterval(function() {
         let now = new Date().getTime();
-        let distance = endTime - now; // <-- use live endTime
+        let distance = endTime - now;
 
         if (distance <= 0) {
             clearInterval(countdown);
@@ -79,33 +75,26 @@
     }, 1000);
 }
 
+document.getElementById("submitButton").addEventListener("click", function() {
+    let enteredCode = document.getElementById("codeInput").value.trim();
+    if (enteredCode === correctCode) {
+        clearInterval(countdown);
+        document.getElementById("downloadLink").style.display = "block";
+        document.getElementById("inputSection").style.display = "none";
+        localStorage.removeItem("arg_endTime");
+    } else {
+        alert("wrong");
+        endTime = endTime - penaltyTime;
+        localStorage.setItem("arg_endTime", endTime);
+    }
+});
 
-        document.getElementById("submitButton").addEventListener("click", function() {
-            let enteredCode = document.getElementById("codeInput").value.trim();
-            if (enteredCode === correctCode) {
-                clearInterval(countdown);
-                document.getElementById("downloadLink").style.display = "block";
-                document.getElementById("inputSection").style.display = "none";
-                localStorage.removeItem("arg_endTime");
-            } else {
-                alert("wrong");
-                //
-                endTime = endTime - penaltyTime;
-                localStorage.setItem("arg_endTime", endTime);
-
-            }
-        });
-
-        //
-        window.onload = function() {
-            if (localStorage.getItem("arg_endTime")) {
-                document.getElementById("startSection").style.display = "none";
-                document.getElementById("countdownSection").style.display = "block";
-                document.getElementById("inputSection").style.display = "block";
-                startCountdown();
-            }
-        };
-    </script>
-
-</body>
-</html>
+window.onload = function() {
+    if (localStorage.getItem("arg_endTime")) {
+        endTime = parseInt(localStorage.getItem("arg_endTime")); //
+        document.getElementById("startSection").style.display = "none";
+        document.getElementById("countdownSection").style.display = "block";
+        document.getElementById("inputSection").style.display = "block";
+        startCountdown();
+    }
+};
