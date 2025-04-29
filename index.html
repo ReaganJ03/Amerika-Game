@@ -89,12 +89,22 @@ document.getElementById("submitButton").addEventListener("click", function() {
     }
 });
 
-window.onload = function() {
-    if (localStorage.getItem("arg_endTime")) {
-        endTime = parseInt(localStorage.getItem("arg_endTime")); //
-        document.getElementById("startSection").style.display = "none";
-        document.getElementById("countdownSection").style.display = "block";
-        document.getElementById("inputSection").style.display = "block";
-        startCountdown();
+window.onload = function () {
+    let savedEndTime = localStorage.getItem("arg_endTime");
+    if (savedEndTime) {
+        let now = new Date().getTime();
+        savedEndTime = parseInt(savedEndTime);
+
+        if (savedEndTime > now) {
+            endTime = savedEndTime;
+            document.getElementById("startSection").style.display = "none";
+            document.getElementById("countdownSection").style.display = "block";
+            document.getElementById("inputSection").style.display = "block";
+            startCountdown();
+        } else {
+            // Timer already expired, clean up
+            localStorage.removeItem("arg_endTime");
+        }
     }
 };
+
